@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ServerListScreenController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS" />
+    </columnConstraints>
+
+    <rowConstraints>
+        <RowConstraints percentHeight="10" />
+        <RowConstraints percentHeight="80" />
+        <RowConstraints percentHeight="10" />
+    </rowConstraints>
+
+    <children>
+        <Label text="Found Devices :">
+            <GridPane.margin>
+                <Insets left="20.0" />
+            </GridPane.margin></Label>
+        <TableView fx:id="serverTable" GridPane.rowIndex="1">
+            <GridPane.margin>
+                <Insets left="20.0" right="20.0" />
+            </GridPane.margin>
+
+            <columns>
+                <TableColumn text="Name">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="deviceName" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Address">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="deviceAddress" />
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+
+        </TableView>
+        <HBox alignment="CENTER_RIGHT" cache="true" GridPane.rowIndex="2">
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <GridPane.margin>
+                <Insets left="20.0" right="20.0" />
+            </GridPane.margin>
+            <children>
+            <Button mnemonicParsing="false" onAction="#backHome" text="Back">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </Button>
+                <Button mnemonicParsing="false" onAction="#refresh" text="Refresh">
+                    <HBox.margin>
+                        <Insets right="10.0" />
+                    </HBox.margin>
+                </Button>
+                <Button defaultButton="true" mnemonicParsing="false" onAction="#connectToDevice" text="Connect" />
+            </children></HBox>
+
+    </children>
+
+</GridPane>

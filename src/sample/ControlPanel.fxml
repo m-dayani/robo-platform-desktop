@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.TextFlow?>
+
+<GridPane alignment="CENTER" hgap="0" prefHeight="500.0" prefWidth="288.0" vgap="0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ControlPanelController">
+    <columnConstraints>
+        <ColumnConstraints />
+    </columnConstraints>
+
+          <rowConstraints>
+      <RowConstraints />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+        <RowConstraints />
+        <RowConstraints maxHeight="278.0" minHeight="12.0" prefHeight="274.0" />
+      <RowConstraints maxHeight="116.0" minHeight="34.0" prefHeight="38.0" vgrow="ALWAYS" />
+    </rowConstraints>
+
+          <children>
+      <StackPane>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <children>
+            <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity">
+              <columnConstraints>
+                <ColumnConstraints />
+                <ColumnConstraints />
+                  <ColumnConstraints />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+              </rowConstraints>
+               <children>
+                  <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0" text="Q">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" right="5.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0" text="W" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" right="5.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0" text="E" GridPane.columnIndex="2">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0" text="A" GridPane.rowIndex="1" />
+                  <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0" text="S" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0" text="D" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </GridPane>
+         </children>
+      </StackPane>
+      <GridPane GridPane.rowIndex="1">
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+         </rowConstraints>
+         <children>
+            <Label text="Key Commands:">
+               <GridPane.margin>
+                  <Insets left="6.0" right="5.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="keyCmds" onKeyPressed="#handleKeyPressed" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets right="4.0" />
+               </GridPane.margin>
+            </TextField>
+         </children>
+      </GridPane>
+
+              <GridPane GridPane.rowIndex="2">
+            <GridPane.margin>
+                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+            </GridPane.margin>
+
+                  <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" />
+                <ColumnConstraints minWidth="80" />
+            </columnConstraints>
+
+                  <rowConstraints>
+                <RowConstraints vgrow="ALWAYS" />
+            </rowConstraints>
+
+                  <children>
+                <TextField fx:id="chatText">
+                    <GridPane.margin>
+                        <Insets right="6.0" />
+                    </GridPane.margin>
+            </TextField>
+                <Button fx:id="sendButton" defaultButton="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendMassage" text="Send" GridPane.columnIndex="1">
+                </Button>
+            </children>
+
+              </GridPane>
+      <ScrollPane GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets left="4.0" right="4.0" top="4.0" />
+         </GridPane.margin>
+         <content>
+            <TextFlow fx:id="chatLog" maxWidth="1.7976931348623157E308" prefHeight="268.0" prefWidth="240.0" style="-fx-background-radius: 3; -fx-background-color: #FFF; -fx-border-color: #CCC; -fx-border-radius: 3;" />
+         </content>
+      </ScrollPane>
+      <GridPane alignment="BOTTOM_CENTER" prefHeight="73.0" prefWidth="238.0" GridPane.rowIndex="4">
+        <columnConstraints>
+          <ColumnConstraints maxWidth="138.0" minWidth="104.0" prefWidth="138.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints />
+        </rowConstraints>
+         <children>
+            <Label maxWidth="1.7976931348623157E308" text="                              " />
+            <Button fx:id="connectBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#disconnect" text="Connect" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Button>
+         </children>
+      </GridPane>
+
+      
+          </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+
+      </GridPane>
