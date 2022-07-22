@@ -1,6 +1,6 @@
 # Robo Platform
 
-Control an Android-enabled robot with a remote desktop computer through a wireless connection.
+Control an Android-powered robot with a remote desktop computer through a wireless connection.
 
 This project has three components:
 
