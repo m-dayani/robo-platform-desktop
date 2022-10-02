@@ -12,7 +12,7 @@ public class LoadingScreenController implements ControlledScreen {
     Main myLogicalParent;
 
     @Override
-    public void setParents(ScreensController screenPage,Main logical) {
+    public void setParents(ScreensController screenPage, Main logical) {
         myLogicalParent = logical;
         myScreenController = screenPage;
     }
@@ -23,6 +23,10 @@ public class LoadingScreenController implements ControlledScreen {
 
     public void setText(String str){
         loadLbl.setText(str);
+    }
+
+    public void backHome() {
+        myLogicalParent.backHome();
     }
 
 }

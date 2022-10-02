@@ -17,14 +17,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import sample.MyWirelessDriver.WirelessMsg;
+import sample.MyWirelessDriver.WirelessCommand;
+
+
 public class Main extends Application implements EventHandler<WindowEvent> {
 
     private static final String DEFAULT_TEST_COMMAND = "test";
 
     ScreensController mainContainer;
 
-    SPPClient blthClient;
+    SPPClient btClient;
+    SPPServer btServer;
+
     WifiClient wifiClient;
+    WifiServer wifiServer;
 
     private StreamPoller inputHandler;
 
@@ -34,7 +41,8 @@ public class Main extends Application implements EventHandler<WindowEvent> {
     BufferedReader in;
     PrintWriter out;
 
-    public Main(){
+    public Main() {
+
         mainContainer = new ScreensController(this);
         mainContainer.loadScreen("ControlPanel","ControlPanel.fxml");
         mainContainer.loadScreen("ConnChoicesScreen","ConnChoicesScreen.fxml");
@@ -47,10 +55,15 @@ public class Main extends Application implements EventHandler<WindowEvent> {
     /*================================= Wifi Connection ===============================*/
 
     public void initWifiClient() {
+        Object wifiConnController = mainContainer.getScreenController("WifiConnScreen");
+        if (wifiConnController instanceof WifiConnScreenController) {
+            ((WifiConnScreenController) wifiConnController).initialize();
+        }
         mainContainer.setScreen("WifiConnScreen");
     }
 
     public void connectWifiClient(String sIp, int sPort) {
+
         wifiClient = new WifiClient();
         wifiClient.setOnConnectionFailed(new ConnFailureListener("WifiConnScreen"));
         wifiClient.setOnConnectionSuccessful(new WifiConnSuccessListener("ControlPanel"));
@@ -59,37 +72,63 @@ public class Main extends Application implements EventHandler<WindowEvent> {
         wifiClient.connectClient(sIp, sPort);
     }
 
-    /*=============================== Bluetooth Connection ============================*/
+    public void startWifiServer(int sPort) {
 
-    public void initBlthClient() {
-        blthClient = new SPPClient();
-        blthClient.setOnDeviceDiscovery(new DeviceDiscoveryListener("ServerListScreen"));
-        mainContainer.setLoadingScreenText("LoadingScreen","Searching for Bluetooth Devices ...");
+        wifiServer = new WifiServer();
+        wifiServer.setOnConnectionFailed(new ConnFailureListener("WifiConnScreen"));
+        wifiServer.setOnConnectionSuccessful(new WifiConnSuccessListener("ControlPanel"));
+        mainContainer.setLoadingScreenText("LoadingScreen", "Waiting for device connection ...");
         mainContainer.setScreen("LoadingScreen");
-        blthClient.startDiscovery();
-
-        blthClient.setOnConnectionFailed(new ConnFailureListener("ServerListScreen"));
-        blthClient.setOnConnectionSuccessful(new BlthConnSuccessListener("ControlPanel"));
+        wifiServer.startServer(sPort);
     }
 
-    public void refresh(){
+    /*=============================== Bluetooth Connection ============================*/
+
+    public void startBtServer() {
+
+        btServer = new SPPServer();
+        btServer.setLogicalParent(this);
+        mainContainer.setLoadingScreenText("LoadingScreen","Waiting for Remote Device to Connect ...");
+        mainContainer.setScreen("LoadingScreen");
+        btServer.start();
+
+        btServer.setOnConnectionSuccessful(new BtConnSuccessListener("ControlPanel"));
+    }
+
+    public void initBtClient() {
+
+        btClient = new SPPClient();
+        btClient.setOnDeviceDiscovery(new DeviceDiscoveryListener("ServerListScreen"));
         mainContainer.setLoadingScreenText("LoadingScreen","Searching for Bluetooth Devices ...");
         mainContainer.setScreen("LoadingScreen");
-        blthClient.startDiscovery();
+        btClient.startDiscovery();
+
+        btClient.setOnConnectionFailed(new ConnFailureListener("ServerListScreen"));
+        btClient.setOnConnectionSuccessful(new BtConnSuccessListener("ControlPanel"));
+    }
+
+    public void refresh() {
+
+        mainContainer.setLoadingScreenText("LoadingScreen","Searching for Bluetooth Devices ...");
+        mainContainer.setScreen("LoadingScreen");
+        btClient.startDiscovery();
     }
 
     public void connectToDevice(int index){
         mainContainer.setLoadingScreenText("LoadingScreen","Connecting ...");
         mainContainer.setScreen("LoadingScreen");
-        blthClient.connect(index);
+        btClient.connect(index);
     }
 
     /*================================== Data Transfer ================================*/
 
-    public void sendMsg(String s){
+    public void sendMsg(String s) {
+
         System.out.println("must send " + s);
+
         out.write(s + "\r\n");
         out.flush();
+
         if (s.equals(DEFAULT_TEST_COMMAND)) {
             this.backHome();
         }
@@ -97,28 +136,45 @@ public class Main extends Application implements EventHandler<WindowEvent> {
 
     public void receiveMsg(String s){
         ControlPanelController ch = ((ControlPanelController)mainContainer.getScreenController("ControlPanel"));
-        ch.recivedMassage(s);
+        ch.receivedMassage(s);
     }
 
     /*================================= Scene Management ==============================*/
 
-    //TODO: Clean open resources
     public void disconnect() {
+
+        if (inputHandler != null) {
+            inputHandler.stopInput();
+            inputHandler = null;
+        }
         if (wifiClient !=  null) {
             wifiClient.clean();
             wifiClient = null;
-            if (inputHandler != null) {
-                inputHandler.stopInput();
-                inputHandler = null;
-                try {
-                    in.close();
-                    in = null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                out.close();
-                out = null;
-            }
+        }
+        if (wifiServer != null) {
+            wifiServer.clean();
+            wifiServer = null;
+        }
+        if (btClient != null) {
+            btClient.clean();
+            btClient = null;
+        }
+        if (btServer != null) {
+            btServer.closeConnection();
+            btServer = null;
+        }
+        if (in != null) {
+            //try {
+                //in.close();
+                in = null;
+            //}
+            //catch (IOException e) {
+            //    e.printStackTrace();
+            //}
+        }
+        if (out != null) {
+            out.close();
+            out = null;
         }
     }
 
@@ -136,13 +192,10 @@ public class Main extends Application implements EventHandler<WindowEvent> {
             msg += e.getText();
         }
         System.out.println("Key event: "+msg);
-        this.sendMsg(msg);
+        this.sendMsg(MyWirelessDriver.encodeMessage(new WirelessMsg(WirelessCommand.CMD_CHAR, msg)));
     }
 
     //TODO: handle keyRelease for implementing sticky key commands
-//    public void handleOnKeyReleased(KeyEvent keyEvent) {
-//        this.sendMsg("x");
-//    }
 
     @Override
     public void handle(WindowEvent event) {
@@ -151,6 +204,7 @@ public class Main extends Application implements EventHandler<WindowEvent> {
 
     @Override
     public void start(Stage primaryStage) {
+
         AnchorPane root = new AnchorPane();
         root.getChildren().addAll(mainContainer);
         AnchorPane.setTopAnchor(mainContainer,0.0);
@@ -169,23 +223,39 @@ public class Main extends Application implements EventHandler<WindowEvent> {
         primaryStage.show();
     }
 
+    /*@Override
+    public void stop() throws Exception {
+
+        this.disconnect();
+        super.stop();
+    }*/
+
     public static void main(String[] args) {
         launch(args);
     }
 
     /*============================= Util Objects ===========================*/
 
-    class BlthConnSuccessListener implements ActionListener {
+    class BtConnSuccessListener implements ActionListener {
         private final String transferPage;
-        BlthConnSuccessListener(String pageName) {
+        BtConnSuccessListener(String pageName) {
             this.transferPage = pageName;
         }
         @Override
         public void actionPerformed(ActionEvent e) {
-            in = blthClient.in;
-            out = blthClient.out;
-            myName = blthClient.getLocalDeviceName();
-            partnerName = blthClient.partnerName;
+
+            if (btServer != null) {
+                in = btServer.getBufferedReader();
+                out = btServer.getPrintWriter();
+                myName = btServer.getLocalDeviceName();
+                partnerName = btServer.partnerName;
+            }
+            else if (btClient != null) {
+                in = btClient.in;
+                out = btClient.out;
+                myName = btClient.getLocalDeviceName();
+                partnerName = btClient.partnerName;
+            }
             mainContainer.setScreen(transferPage);
             inputHandler = new StreamPoller();
             inputHandler.start();
@@ -199,10 +269,19 @@ public class Main extends Application implements EventHandler<WindowEvent> {
         }
         @Override
         public void actionPerformed(ActionEvent e) {
-            in = wifiClient.in;
-            out = wifiClient.out;
-            myName = wifiClient.getLocalDeviceName();
-            partnerName = wifiClient.partnerName;
+
+            if (wifiClient != null) {
+                in = wifiClient.in;
+                out = wifiClient.out;
+                myName = wifiClient.getLocalDeviceName();
+                partnerName = wifiClient.partnerName;
+            }
+            else if (wifiServer != null) {
+                in = wifiServer.in;
+                out = wifiServer.out;
+                myName = wifiServer.getLocalDeviceName();
+                partnerName = wifiServer.partnerName;
+            }
             mainContainer.setScreen(transferPage);
             inputHandler = new StreamPoller();
             inputHandler.start();
@@ -227,26 +306,43 @@ public class Main extends Application implements EventHandler<WindowEvent> {
         }
         @Override
         public void actionPerformed(ActionEvent e) {
-            ObservableList<RemoteDeviceInfo> devInfo = FXCollections.observableList(blthClient.getDeviceInfos());
+            ObservableList<RemoteDeviceInfo> devInfo = FXCollections.observableList(btClient.getDeviceInfos());
             ((ServerListScreenController) mainContainer.getScreenController(transferPage)).setTableData(devInfo);
             mainContainer.setScreen(transferPage);
         }
     }
 
-    class StreamPoller extends Thread{
+    class StreamPoller extends Thread {
 
         boolean isRunning = false;
-        public void run(){
+        public void run() {
+
             isRunning = true;
-            while(isRunning){
+            while (isRunning) {
                 try {
                     if(in != null) {
-                        System.out.println("in not null");
+
                         String s = in.readLine();
-                        if (s != null) Platform.runLater(() -> receiveMsg(s));
-                        else this.stopInput();
+                        if (s != null) {
+
+                            WirelessMsg msg = MyWirelessDriver.decodeMessage(s);
+                            System.out.println("got input: "+msg.mMessage);
+
+                            if (MyWirelessDriver.matchesTest(msg)) {
+
+                                System.out.println("matched expected test command");
+                                Platform.runLater(() -> sendMsg(MyWirelessDriver.getTestResponse()));
+                            }
+                            else {
+                                Platform.runLater(() -> receiveMsg(s));
+                            }
+                        }
+                        else {
+                            this.stopInput();
+                        }
                     }
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
             }

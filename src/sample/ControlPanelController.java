@@ -8,6 +8,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import sample.MyWirelessDriver.WirelessCommand;
+import sample.MyWirelessDriver.WirelessMsg;
+
 public class ControlPanelController implements ControlledScreen {
 
     @FXML
@@ -15,7 +18,7 @@ public class ControlPanelController implements ControlledScreen {
     @FXML
     private TextField chatText;
     public Button connectBtn;
-    public TextField keyCmds;
+    public TextField keyCommands;
     public Button sendButton;
 
     ScreensController myScreenController;
@@ -36,18 +39,17 @@ public class ControlPanelController implements ControlledScreen {
     }
 
     public void disconnect() {
-//        isConnected = false;
-//        this.connectBtn.setText("Connect");
+
         myLogicalParent.backHome();
     }
 
-    private void reportMessage(String tag,String msg,String style) {
+    private void reportMessage(String tag, String msg, String style) {
+
         Text blue = new Text(tag + " : ");
         blue.setStyle(style);
 
         Text m = new Text(msg + "\n");
-//        String log = chatLog.getText();
-//        chatLog.setText(log+blue.getText()+m.getText());
+
         chatLog.getChildren().add(blue);
         chatLog.getChildren().add(m);
     }
@@ -55,31 +57,28 @@ public class ControlPanelController implements ControlledScreen {
     @FXML
     protected void sendMassage() {
         String msg = chatText.getText();
-        this.reportMessage(myLogicalParent.myName,msg,"-fx-fill: #0098d8");
+        this.reportMessage(myLogicalParent.myName, msg,"-fx-fill: #0098d8");
 
         chatText.setText("");
-        myLogicalParent.sendMsg(msg);
+        myLogicalParent.sendMsg(MyWirelessDriver.encodeMessage(new WirelessMsg(WirelessCommand.CMD_WORD, msg)));
     }
 
-    public void recivedMassage(String msg){
+    public void receivedMassage(String msg){
         this.reportMessage(myLogicalParent.partnerName,msg,"-fx-fill: orangered");
     }
 
     public void handleCmdBtn(ActionEvent actionEvent) {
         Button btn = (Button) actionEvent.getSource();
         System.out.println(btn.getText());
-        myLogicalParent.sendMsg(btn.getText().toLowerCase());
+        myLogicalParent.sendMsg(MyWirelessDriver.encodeMessage(new WirelessMsg(WirelessCommand.CMD_DIR, btn.getText().toLowerCase())));
     }
 
     public void handleKeyPressed(KeyEvent keyEvent) {
-        keyCmds.setText("");
+        keyCommands.setText("");
         //this.reportMessage("Key Command: ", keyEvent.getCode().toString()+','+keyEvent.getText(),"");
         myLogicalParent.handleOnKeyPressed(keyEvent);
     }
 
     //TODO: handle keyRelease for implementing sticky key commands
-//    public void handleKeyReleased(KeyEvent keyEvent) {
-//
-//    }
 }
 

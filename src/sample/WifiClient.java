@@ -46,6 +46,7 @@ public class WifiClient {
 //    }
 
     public void connectClient(String sIp, int sPort) {
+
         //setTargetController(controller);
         setServerIp(sIp);
         setServerPort(sPort);
@@ -203,7 +204,8 @@ public class WifiClient {
         if (clientSocket != null) {
             try {
                 clientSocket.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }

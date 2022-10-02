@@ -9,106 +9,110 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane alignment="center" hgap="0" prefHeight="500.0" prefWidth="288.0" vgap="0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.WifiConnScreenController">
+<GridPane alignment="center" prefHeight="500.0" prefWidth="288.0" xmlns="http://javafx.com/javafx/11.0.1"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.WifiConnScreenController">
     <columnConstraints>
-        <ColumnConstraints />
+        <ColumnConstraints/>
     </columnConstraints>
 
     <rowConstraints>
-        <RowConstraints fillHeight="false" />
-        <RowConstraints />
-        <RowConstraints vgrow="ALWAYS" />
+        <RowConstraints fillHeight="false"/>
+        <RowConstraints/>
+        <RowConstraints/>
+        <RowConstraints vgrow="ALWAYS"/>
     </rowConstraints>
 
-    <children>
-      <VBox prefHeight="90.0" prefWidth="258.0">
-         <children>
-            <Label text="1. Connect to a local network">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </Label>
-            <Label text="2. Run the server app on remote device">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </Label>
-            <Label text="Enter Server Info:">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </Label>
-         </children>
-         <GridPane.margin>
-            <Insets top="25.0" />
-         </GridPane.margin>
-      </VBox>
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+    </padding>
 
-        <GridPane GridPane.rowIndex="1">
+    <VBox prefHeight="90.0" prefWidth="258.0">
+        <GridPane.margin>
+            <Insets top="25.0"/>
+        </GridPane.margin>
+        <Label text="1. Connect to a local network">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </Label>
+        <Label text="2. Start the server">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </Label>
+        <Label text="Connect the Remote Client to Server Address:">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </Label>
+    </VBox>
+
+    <GridPane GridPane.rowIndex="1">
+        <GridPane.margin>
+            <Insets left="10.0"/>
+        </GridPane.margin>
+
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="193.0" minWidth="14.0" prefWidth="73.0"/>
+            <ColumnConstraints maxWidth="278.0" minWidth="80.0" prefWidth="227.0"/>
+        </columnConstraints>
+
+        <rowConstraints>
+            <!--RowConstraints vgrow="ALWAYS"/-->
+            <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="ALWAYS"/>
+        </rowConstraints>
+
+        <!--Label maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="95.0" text="IP Address">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </Label>
+        <TextField fx:id="sIpAddress" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1">
             <GridPane.margin>
-                <Insets left="10.0" />
+                <Insets right="6.0"/>
             </GridPane.margin>
+        </TextField-->
+        <Label maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="41.0" text="Port"
+               GridPane.rowIndex="1">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </Label>
+        <TextField fx:id="sPort" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <GridPane.margin>
+                <Insets right="6.0"/>
+            </GridPane.margin>
+        </TextField>
+    </GridPane>
 
-            <columnConstraints>
-                <ColumnConstraints hgrow="ALWAYS" maxWidth="193.0" minWidth="14.0" prefWidth="73.0" />
-                <ColumnConstraints maxWidth="278.0" minWidth="80.0" prefWidth="227.0" />
-            </columnConstraints>
+    <Label GridPane.rowIndex="2" fx:id="suggestedInterfaces" maxWidth="1.7976931348623157E308"
+           prefHeight="100.0" prefWidth="95.0" text="IP Address" lineSpacing="1.4">
+        <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </padding>
+    </Label>
 
-            <rowConstraints>
-                <RowConstraints vgrow="ALWAYS" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
-            </rowConstraints>
+    <GridPane GridPane.rowIndex="3">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="195.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="105.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        </rowConstraints>
+        <Button mnemonicParsing="false" onAction="#backHome" text="Back" GridPane.halignment="RIGHT"
+                GridPane.valignment="BOTTOM">
+            <GridPane.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </GridPane.margin>
+        </Button>
+        <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startServer"
+                text="Start Server" GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
+            <GridPane.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </GridPane.margin>
+        </Button>
+    </GridPane>
 
-            <children>
-            <Label maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="95.0" text="IP Address">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </Label>
-                <TextField fx:id="sIpAddress" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1">
-                    <GridPane.margin>
-                        <Insets right="6.0" />
-                    </GridPane.margin>
-                </TextField>
-            <Label maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="41.0" text="Port" GridPane.rowIndex="1">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </Label>
-            <TextField fx:id="sPort" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets right="6.0" />
-               </GridPane.margin>
-            </TextField>
-            </children>
-
-        </GridPane>
-        <GridPane GridPane.rowIndex="2">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="195.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="105.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-            <children>
-            <Button mnemonicParsing="false" onAction="#backHome" text="Back" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
-               <GridPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </GridPane.margin>
-            </Button>
-                <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#connectClient" text="Connect" GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Button>
-            </children>
-        </GridPane>
-
-
-    </children>
-   <padding>
-      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-   </padding>
 
 </GridPane>

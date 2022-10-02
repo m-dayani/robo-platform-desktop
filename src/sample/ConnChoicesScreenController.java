@@ -29,7 +29,8 @@ public class ConnChoicesScreenController implements ControlledScreen {
                 break;
             case "rd1":
                 System.out.println("Radio 1 pushed");
-                myLogicalParent.initBlthClient();
+                //myLogicalParent.initBtClient();
+                myLogicalParent.startBtServer();
                 break;
             default:
                 break;

@@ -33,7 +33,8 @@ public class ScreensController extends StackPane {
             controllers.put(name,myLoader.getController());
             myScreenControler.setParents(this,logicalParent);
             addScreen(name, loadScreen);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
@@ -49,30 +50,34 @@ public class ScreensController extends StackPane {
 //    }
 
     public void setScreen(final String name) {
-        if (screens.get(name) != null) { //screen loaded
+
+        Node currNode = screens.get(name);
+        if (currNode != null) { //screen loaded
             final DoubleProperty opacity = opacityProperty();
             //Is there is more than one screen
             if (!getChildren().isEmpty()) {
-                Timeline fade = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)), new KeyFrame(new Duration(1000),
+                Timeline fade = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)), new KeyFrame(new Duration(500),
                         (ActionEvent e) -> {
                             //remove displayed screen
                             getChildren().remove(0);
                             //add new screen
-                            getChildren().add(0, screens.get(name));
-                            Timeline fadeIn = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)), new KeyFrame(new Duration(1000), new KeyValue(opacity, 1.0)));
+                            getChildren().add(0, currNode);
+                            Timeline fadeIn = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)), new KeyFrame(new Duration(500), new KeyValue(opacity, 1.0)));
                             fadeIn.play();
                         }
                         , new KeyValue(opacity, 0.0)));
                 fade.play();
-            } else {
+            }
+            else {
                 //no one else been displayed, then just show
                 setOpacity(0.0);
-                getChildren().add(screens.get(name));
+                getChildren().add(currNode);
                 Timeline fadeIn = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)), new KeyFrame(new Duration(1000), new KeyValue(opacity, 1.0)));
                 fadeIn.play();
             }
-        } else {
-            System.out.println("screen hasn't been loaded!\n");
+        }
+        else {
+            System.out.println("screen: "+name+" hasn't been loaded!\n");
         }
     }
 

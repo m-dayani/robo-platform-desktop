@@ -19,7 +19,7 @@ import javax.microedition.io.StreamConnection;
 /**
  * A simple SPP client that connects with an SPP server
  */
-public class SPPClient implements DiscoveryListener{
+public class SPPClient implements DiscoveryListener {
 
 //    private static final java.util.UUID BLUETOOTH_SERVICE_UUID =
 //            new java.util.UUID(0xe6a53cbcb10543dbL, 0x9fc8769b6b857e33L);
@@ -28,7 +28,7 @@ public class SPPClient implements DiscoveryListener{
     private static final Object lock = new Object();
 
     //vector containing the devices discovered
-    private static Vector<RemoteDevice> vecDevices=new Vector<RemoteDevice>();
+    private static Vector<RemoteDevice> vecDevices = new Vector<RemoteDevice>();
 
     private static String connectionURL=null;
 

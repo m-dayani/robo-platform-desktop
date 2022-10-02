@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
@@ -7,14 +8,16 @@ import javafx.scene.control.TextField;
  */
 public class WifiConnScreenController implements ControlledScreen {
 
-    public TextField sIpAddress;
+//    public TextField sIpAddress;
     public TextField sPort;
+    public Label suggestedInterfaces;
     ScreensController myScreenController;
     Main myLogicalParent;
 
     public void initialize() {
-        sIpAddress.setText(WifiClient.getDefaultServerIp());
+//        sIpAddress.setText(WifiClient.getDefaultServerIp());
         sPort.setText(Integer.toString(WifiClient.getDefaultServerPort()));
+        suggestedInterfaces.setText(WifiServer.getSuggestedInterfaces(true));
     }
 
     @Override
@@ -24,7 +27,11 @@ public class WifiConnScreenController implements ControlledScreen {
     }
 
     public void connectClient() {
-        myLogicalParent.connectWifiClient(sIpAddress.getText(),Integer.parseInt(sPort.getText()));
+        //myLogicalParent.connectWifiClient(sIpAddress.getText(),Integer.parseInt(sPort.getText()));
+    }
+
+    public void startServer() {
+        myLogicalParent.startWifiServer(Integer.parseInt(sPort.getText()));
     }
 
     public void backHome() {
