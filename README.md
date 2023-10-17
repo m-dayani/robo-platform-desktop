@@ -1,4 +1,4 @@
-# Robo Platformm
+# Robo Platform
 
 Control an Android-powered robot with a remote desktop computer through a wireless connection.
 
