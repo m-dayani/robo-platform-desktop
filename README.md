@@ -13,4 +13,8 @@ This project has three components:
 
 1. Javafx (available in JDK < 11)
 2. The Bluecove wireless library
+<<<<<<< HEAD
 3. [Optional] IntelliJ IDEA Community Edition (compiled and tested with IntelliJ 2019, JDK 11 on Windows 8.1)
+=======
+3. [Optional] Intellij IDEA Community Edition (compiled and tested with Intellij 2019, JDK 11 on Windows 8.1)
+>>>>>>> efc3f0bcfa5f394d8975a6a7a6440f258bcf51ac
