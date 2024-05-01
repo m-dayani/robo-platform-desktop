@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -73,12 +74,36 @@ public class ControlPanelController implements ControlledScreen {
         myLogicalParent.sendMsg(MyWirelessDriver.encodeMessage(new WirelessMsg(WirelessCommand.CMD_DIR, btn.getText().toLowerCase())));
     }
 
+    // These two work perfectly (sticky key commands) when comments area is selected
     public void handleKeyPressed(KeyEvent keyEvent) {
         keyCommands.setText("");
+//        System.out.println("ControlPanel: onKeyPressed");
         //this.reportMessage("Key Command: ", keyEvent.getCode().toString()+','+keyEvent.getText(),"");
         myLogicalParent.handleOnKeyPressed(keyEvent);
     }
 
-    //TODO: handle keyRelease for implementing sticky key commands
+    public void handleKeyReleased(KeyEvent keyEvent) {
+        keyCommands.setText("");
+//        System.out.println("ControlPanel: onKeyReleased");
+        myLogicalParent.handleOnKeyReleased(keyEvent);
+    }
+
+    // handle keyRelease for implementing sticky key commands
+
+    public void handleMousePressed(MouseEvent event) {
+
+//        System.out.println("Mouse Pressed");
+        Button btn = (Button) event.getSource();
+//        System.out.println(btn.getText());
+        myLogicalParent.sendMsg(MyWirelessDriver.encodeMessage(new WirelessMsg(WirelessCommand.CMD_DIR, btn.getText().toLowerCase())));
+    }
+
+    public void handleMouseReleased() {
+
+//        System.out.println("Mouse Released");
+//        Button btn = (Button) event.getSource();
+//        System.out.println(btn.getText());
+        myLogicalParent.sendMsg(MyWirelessDriver.encodeMessage(new WirelessMsg(WirelessCommand.CMD_DIR, "0")));
+    }
 }
 

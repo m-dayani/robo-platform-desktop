@@ -25,6 +25,8 @@ public class Main extends Application implements EventHandler<WindowEvent> {
 
     private static final String DEFAULT_TEST_COMMAND = "test";
 
+    private String mLastCmdKeyCode = "0";
+
     ScreensController mainContainer;
 
     SPPClient btClient;
@@ -183,6 +185,8 @@ public class Main extends Application implements EventHandler<WindowEvent> {
         mainContainer.setScreen("ConnChoicesScreen");
     }
 
+    // These two methods handle window key presses
+
     public void handleOnKeyPressed(KeyEvent e) {
         String msg = "";
         if (e.getText().isEmpty()) {
@@ -191,11 +195,25 @@ public class Main extends Application implements EventHandler<WindowEvent> {
         else {
             msg += e.getText();
         }
+
+        // make this more efficient (only send if different key is pressed)
+        if (msg.equals(mLastCmdKeyCode)) {
+            return;
+        }
+        mLastCmdKeyCode = msg;
+
         System.out.println("Key event: "+msg);
         this.sendMsg(MyWirelessDriver.encodeMessage(new WirelessMsg(WirelessCommand.CMD_CHAR, msg)));
     }
 
-    //TODO: handle keyRelease for implementing sticky key commands
+    // handle keyRelease for implementing sticky key commands
+    // TODO: the release handler is called twice when entering cmmand keys -> why??
+    public void handleOnKeyReleased(KeyEvent e) {
+        String msg = "0";
+        mLastCmdKeyCode = msg;
+        System.out.println("Key event: "+msg);
+        this.sendMsg(MyWirelessDriver.encodeMessage(new WirelessMsg(WirelessCommand.CMD_CHAR, msg)));
+    }
 
     @Override
     public void handle(WindowEvent event) {
@@ -214,9 +232,7 @@ public class Main extends Application implements EventHandler<WindowEvent> {
 
         Scene scene = new Scene(root,350,600);
         scene.setOnKeyPressed(this::handleOnKeyPressed);
-        scene.setOnKeyReleased(e -> {
-            //this.handleOnKeyReleased(e);
-        });
+        scene.setOnKeyReleased(this::handleOnKeyReleased);
         primaryStage.setTitle("Robo Controller v1.0");
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(this);

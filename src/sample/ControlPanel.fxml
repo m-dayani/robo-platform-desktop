@@ -46,35 +46,30 @@
             <padding>
                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
             </padding>
-            <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0"
-                    text="Q">
+            <Button mnemonicParsing="false" onMousePressed="#handleMousePressed" onMouseReleased="#handleMouseReleased"
+                    prefHeight="30.0" prefWidth="30.0" text="Q">
                 <GridPane.margin>
                     <Insets bottom="5.0" right="5.0"/>
                 </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0"
-                    text="W"
-                    GridPane.columnIndex="1">
+            <Button mnemonicParsing="false" onMousePressed="#handleMousePressed" onMouseReleased="#handleMouseReleased"
+                    prefHeight="30.0" prefWidth="30.0" text="W" GridPane.columnIndex="1">
                 <GridPane.margin>
                     <Insets bottom="5.0" right="5.0"/>
                 </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0"
-                    text="E"
-                    GridPane.columnIndex="2">
+            <Button mnemonicParsing="false" onMousePressed="#handleMousePressed" onMouseReleased="#handleMouseReleased"
+                    prefHeight="30.0" prefWidth="30.0" text="E" GridPane.columnIndex="2">
                 <GridPane.margin>
                     <Insets bottom="5.0"/>
                 </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0"
-                    text="A"
-                    GridPane.rowIndex="1"/>
-            <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0"
-                    text="S"
-                    GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-            <Button mnemonicParsing="false" onAction="#handleCmdBtn" prefHeight="30.0" prefWidth="30.0"
-                    text="D"
-                    GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+            <Button mnemonicParsing="false" onMousePressed="#handleMousePressed" onMouseReleased="#handleMouseReleased"
+                    prefHeight="30.0" prefWidth="30.0" text="A" GridPane.rowIndex="1"/>
+            <Button mnemonicParsing="false" onMousePressed="#handleMousePressed" onMouseReleased="#handleMouseReleased"
+                    prefHeight="30.0" prefWidth="30.0" text="S" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <Button mnemonicParsing="false" onMousePressed="#handleMousePressed" onMouseReleased="#handleMouseReleased"
+                    prefHeight="30.0" prefWidth="30.0" text="D" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
         </GridPane>
     </StackPane>
     <GridPane GridPane.rowIndex="1">
@@ -90,7 +85,7 @@
                 <Insets left="6.0" right="5.0"/>
             </GridPane.margin>
         </Label>
-        <TextField fx:id="keyCommands" onKeyPressed="#handleKeyPressed" GridPane.columnIndex="1">
+        <TextField fx:id="keyCommands" onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" GridPane.columnIndex="1">
             <GridPane.margin>
                 <Insets right="4.0"/>
             </GridPane.margin>
