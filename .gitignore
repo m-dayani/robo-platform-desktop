@@ -2,3 +2,5 @@ out/
 backup/
 
 bin/
+
+.idea/inspectionProfiles/

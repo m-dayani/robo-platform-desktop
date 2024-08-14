@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 import sample.MyWirelessDriver.WirelessMsg;
 import sample.MyWirelessDriver.WirelessCommand;
@@ -126,7 +127,7 @@ public class Main extends Application implements EventHandler<WindowEvent> {
 
     public void sendMsg(String s) {
 
-        System.out.println("must send " + s);
+//        System.out.println("must send " + s);
 
         out.write(s + "\r\n");
         out.flush();
@@ -202,7 +203,7 @@ public class Main extends Application implements EventHandler<WindowEvent> {
         }
         mLastCmdKeyCode = msg;
 
-        System.out.println("Key event: "+msg);
+//        System.out.println("Key event: "+msg);
         this.sendMsg(MyWirelessDriver.encodeMessage(new WirelessMsg(WirelessCommand.CMD_CHAR, msg)));
     }
 
@@ -342,12 +343,47 @@ public class Main extends Application implements EventHandler<WindowEvent> {
                         if (s != null) {
 
                             WirelessMsg msg = MyWirelessDriver.decodeMessage(s);
-                            System.out.println("got input: "+msg.mMessage);
+                            String msgStr = msg.mMessage;
+//                            System.out.println("got input: " + msgStr);
 
                             if (MyWirelessDriver.matchesTest(msg)) {
 
                                 System.out.println("matched expected test command");
                                 Platform.runLater(() -> sendMsg(MyWirelessDriver.getTestResponse()));
+                            }
+                            else if (msg.mCmd.equals(WirelessCommand.CMD_WORD) && msgStr.contains("test:ltc")) {
+                                String[] ltcParts = msgStr.split(":");
+                                if (ltcParts.length > 3) {
+                                    System.out.println("Odd test prompt: " + msgStr);
+                                }
+                                else if (ltcParts.length > 2) {
+                                    String newMsgStr = "test:ltc:rp:" + ltcParts[2];
+                                    WirelessMsg msgWl = new WirelessMsg(WirelessCommand.CMD_WORD, newMsgStr);
+                                    Platform.runLater(() -> sendMsg(MyWirelessDriver.encodeMessage(msgWl)));
+                                }
+                            }
+                            else if (msg.mCmd.equals(WirelessCommand.CMD_WORD) && msgStr.contains("test:tp")) {
+                                String[] tpParts = msgStr.split(":");
+                                if (tpParts.length > 2) {
+                                    int i = 0;
+                                    int cnt = 0;
+                                    for (char c : tpParts[2].toCharArray()) {
+                                        if (i % 2 == 0) {
+                                            if (c == 0x55) {
+                                                cnt++;
+                                            }
+                                        }
+                                        else {
+                                            if (c == 0x2A) {
+                                                cnt++;
+                                            }
+                                        }
+                                        i++;
+                                    }
+                                    String newMsgStr = "test:tp:rp:" + cnt;
+                                    WirelessMsg msgWl = new WirelessMsg(WirelessCommand.CMD_WORD, newMsgStr);
+                                    Platform.runLater(() -> sendMsg(MyWirelessDriver.encodeMessage(msgWl)));
+                                }
                             }
                             else {
                                 Platform.runLater(() -> receiveMsg(s));
